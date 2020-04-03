@@ -58,6 +58,20 @@
     },
     "resources": [
         {
+            "apiVersion": "2018-02-01",
+            "name": "pid-e0d93af3-ab78-4d46-a7e6-974a3863a085",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                    ]
+                }
+            }
+        },
+        {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2017-03-01",
             "name": "vmVnet",
@@ -189,7 +203,7 @@
                         "createOption": "FromImage",
                         "managedDisk": {
                             "storageAccountType": "Standard_LRS"
-                            },
+                        },
                         "caching": "ReadWrite"
                     }
                 },
