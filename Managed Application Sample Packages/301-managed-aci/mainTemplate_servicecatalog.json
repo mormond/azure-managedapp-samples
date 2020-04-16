@@ -1,0 +1,141 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "spUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "The service principal ID."
+            }
+        },
+        "vaultName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the keyvault that contains the secret."
+            }
+        },
+        "secretName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the secret."
+            }
+        },
+        "vaultResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the resource group that contains the keyvault."
+            }
+        },
+        "vaultSubscription": {
+            "type": "string",
+            "defaultValue": "[subscription().subscriptionId]",
+            "metadata": {
+                "description": "The name of the subscription that contains the keyvault."
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "name": "pid-e0d93af3-ab78-4d46-a7e6-974a3863a086",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "dynamicSecret",
+            "properties": {
+                "mode": "Incremental",
+                "expressionEvaluationOptions": {
+                    "scope": "inner"
+                },
+                "parameters": {
+                    "spUsername": {
+                        "value": "[parameters('spUsername')]"
+                    },
+                    "spPassword": {
+                        "reference": {
+                            "keyVault": {
+                                "id": "[resourceId(parameters('vaultSubscription'), parameters('vaultResourceGroupName'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
+                            },
+                            "secretName": "[parameters('secretName')]"
+                        }
+                    }
+                },
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "spUsername": {
+                            "type": "string"
+                        },
+                        "spPassword": {
+                            "type": "securestring"
+                        }
+                    },
+                    "variables": {
+                    },
+                    "resources": [
+                        {
+                            "type": "Microsoft.ContainerInstance/containerGroups",
+                            "apiVersion": "2018-10-01",
+                            "name": "meo-container-group",
+                            "location": "westeurope",
+                            "properties": {
+                                "containers": [
+                                    {
+                                        "name": "meo-container",
+                                        "properties": {
+                                            "image": "meomeo.azurecr.io/samples/ml-model-server-marketplace:2.0.0.0",
+                                            "ports": [
+                                                {
+                                                    "protocol": "TCP",
+                                                    "port": 80
+                                                }
+                                            ],
+                                            "environmentVariables": [
+                                            ],
+                                            "resources": {
+                                                "requests": {
+                                                    "memoryInGB": 1.5,
+                                                    "cpu": 1
+                                                }
+                                            }
+                                        }
+                                    }
+                                ],
+                                "imageRegistryCredentials": [
+                                    {
+                                        "server": "meomeo.azurecr.io",
+                                        "username": "[parameters('spUsername')]",
+                                        "password": "[parameters('spPassword')]"
+                                    }
+                                ],
+                                "restartPolicy": "OnFailure",
+                                "ipAddress": {
+                                    "ports": [
+                                        {
+                                            "protocol": "TCP",
+                                            "port": 80
+                                        }
+                                    ],
+                                    "type": "Public"
+                                },
+                                "osType": "Linux"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
