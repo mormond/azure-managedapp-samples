@@ -56,7 +56,7 @@
                     "contentVersion": "1.0.0.0",
                     "parameters": {
                         "spUsername": {
-                            "type": "string"
+                            "type": "securestring"
                         },
                         "spPassword": {
                             "type": "securestring"
@@ -69,7 +69,7 @@
                             "type": "Microsoft.ContainerInstance/containerGroups",
                             "apiVersion": "2018-10-01",
                             "name": "meo-container-group",
-                            "location": "westeurope",
+                            "location": "southcentralus",
                             "properties": {
                                 "containers": [
                                     {
