@@ -4,31 +4,35 @@
     "parameters": {
         "spUsername": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "The service principal ID."
             }
         },
         "vaultName": {
             "type": "string",
+            "defaultValue": "managedapps",
             "metadata": {
                 "description": "The name of the keyvault that contains the secret."
             }
         },
         "secretName": {
             "type": "string",
+            "defaultValue": "spPassword",
             "metadata": {
                 "description": "The name of the secret."
             }
         },
         "vaultResourceGroupName": {
             "type": "string",
+            "defaultValue": "ContainerRegistry",
             "metadata": {
                 "description": "The name of the resource group that contains the keyvault."
             }
         },
         "vaultSubscription": {
             "type": "string",
-            "defaultValue": "[subscription().subscriptionId]",
+            "defaultValue": "",
             "metadata": {
                 "description": "The name of the subscription that contains the keyvault."
             }
