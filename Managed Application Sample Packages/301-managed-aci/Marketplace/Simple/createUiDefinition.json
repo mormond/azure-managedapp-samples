@@ -1,0 +1,25 @@
+{
+   "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+   "handler": "Microsoft.Azure.CreateUIDef",
+   "version": "0.1.2-preview",
+   "parameters": {
+      "basics": [
+         {
+            "name": "containerPrefix",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Container prefix name",
+            "defaultValue": "",
+            "constraints": {
+              "required": true,
+              "regex": "^[a-z0-9A-Z]{1,10}$",
+              "validationMessage": "Only letters and numbers are allowed, and the value must be 1-10 characters long."
+            }
+          }
+      ],
+      "steps": [],
+      "outputs": {
+         "containerPrefix": "[basics('containerPrefix')]",
+         "location": "[location()]"
+      }
+   }
+}

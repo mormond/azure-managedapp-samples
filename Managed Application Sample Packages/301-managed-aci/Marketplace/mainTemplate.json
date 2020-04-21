@@ -1,7 +1,21 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Select the Azure region for the resources"
+            }
+        },
+        "containerPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Prefix for container group / container instance name"
+            }
+        }
+    },
     "variables": {
         "spUsernameName": "spUsername",
         "vaultName": "managedapps",
@@ -68,12 +82,12 @@
                         {
                             "type": "Microsoft.ContainerInstance/containerGroups",
                             "apiVersion": "2018-10-01",
-                            "name": "meo-container-group",
-                            "location": "southcentralus",
+                            "name": "[concat(parameters('containerPrefix'), '-container-group')]",
+                            "location": "[parameters('location')]",
                             "properties": {
                                 "containers": [
                                     {
-                                        "name": "meo-container",
+                                        "name": "[concat(parameters('containerPrefix'), '-container')]",
                                         "properties": {
                                             "image": "meomeo.azurecr.io/samples/ml-model-server-marketplace:2.0.0.0",
                                             "ports": [
